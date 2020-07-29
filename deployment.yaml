@@ -1,0 +1,43 @@
+# Deployment
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+   name: prod
+   namespace: production
+   labels:
+    app: nginx
+  spec:
+   replicas: 10
+   selector:
+    matchLabels:
+     app: nginx
+   template:
+    metadata:
+     labels:
+      app: nginx
+    spec:
+     containers:
+     - name: hello-world-service
+       image: venki518/apsrtc:ownimage
+       ports:
+       - containerPort: 80
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  namespace: production
+spec:
+  selector:
+    app: nginx
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 80
+#nodePort: 30102
+    protocol: TCP
+
+
+
